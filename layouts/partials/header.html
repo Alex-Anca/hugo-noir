@@ -6,47 +6,33 @@
         body {
             font-family: 'Space Grotesk', sans-serif;
         }
-        .language-switcher {
+        /* Navbar gradient that fades into the page */
+        :root { --nav-start: rgba(255,255,255,0.95); --nav-mid: rgba(255,255,255,0.6); }
+        .dark { --nav-start: rgba(18,18,18,0.95); --nav-mid: rgba(18,18,18,0.6); }
+        .nav-fade {
             position: relative;
-            display: inline-block;
+            background: linear-gradient(to bottom, var(--nav-start) 0%, var(--nav-mid) 40%, rgba(0,0,0,0) 100%);
+            backdrop-filter: blur(6px) saturate(120%);
+            -webkit-backdrop-filter: blur(6px) saturate(120%);
+            overflow: visible;
         }
-        .language-switcher-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            cursor: pointer;
-        }
-        .language-dropdown {
-            display: none;
+        /* Extend the gradient below the header to remove the hard edge */
+        .nav-fade::before {
+            content: "";
             position: absolute;
-            background-color: var(--bg-secondary);
-            min-width: 120px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            z-index: 1;
-            border-radius: 0.5rem;
-            overflow: hidden;
+            left: 0; right: 0; top: 100%;
+            height: 72px; /* fade length below header */
+            background: linear-gradient(to bottom, var(--nav-mid) 0%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
+            opacity: 0.5;
         }
-        .language-switcher:hover .language-dropdown {
-            display: block;
-        }
-        .language-dropdown a {
-            padding: 0.75rem 1rem;
-            display: block;
-            text-decoration: none;
-            transition: background-color 0.2s;
-        }
-        .language-dropdown a:hover {
-            background-color: rgba(0,0,0,0.05);
-        }
-        .dark .language-dropdown a:hover {
-            background-color: rgba(255,255,255,0.05);
-        }
-        .language-active {
-            font-weight: 600;
+        /* Decorative thin line removed to avoid an unwanted horizontal rule across pages */
+        .nav-fade::after {
+            display: none;
         }
     </style>
 </head>
-<header class="py-6 relative">
+<header class="py-3 nav-fade absolute top-0 left-0 right-0 z-40">
     <div class="max-w-6xl mx-auto px-4">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div class="flex justify-between items-center">
@@ -65,38 +51,24 @@
                 </button>
             </div>            
             <!-- Desktop Navigation -->
-            <nav class="hidden md:flex flex-wrap justify-center items-center gap-4 md:gap-6">
+            <nav class="hidden md:flex flex-wrap justify-center items-center gap-3 md:gap-4">
                 {{ range .Site.Menus.main }}
-                <a href="{{ .URL | absURL }}" class="inline-block text-lg text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 {{ if or ($.Page.IsMenuCurrent "main" .) ($.Page.HasMenuCurrent "main" .) }}text-accent-light dark:text-accent-dark font-semibold{{ end }}">{{ .Name }}</a>
+                {{ $itemUrl := .URL | absURL }}
+                {{ $current := $.Permalink }}
+                {{ $isActive := or (or ($.Page.IsMenuCurrent "main" .) ($.Page.HasMenuCurrent "main" .)) (or (eq $itemUrl $current) (hasPrefix $current $itemUrl)) }}
+                <a href="{{ $itemUrl }}" class="inline-block text-lg transition-colors duration-300 px-2 py-1 rounded-md border-b-2
+                   text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark
+                   {{ if $isActive }}
+                       text-accent-light dark:text-accent-dark font-semibold bg-white/30 dark:bg-white/10 border-accent-light dark:border-accent-dark
+                   {{ else }}
+                       border-transparent
+                   {{ end }}">{{ .Name }}</a>
                 {{ end }}
             </nav>
             <div class="hidden md:flex justify-end items-center">
                 <div class="flex items-center">
                     <span class="text-lg text-text-secondary-light dark:text-text-secondary-dark mr-2">{{ T "localTimeLabel" }}</span>
                     <div id="local-time" class="text-lg text-text-secondary-light dark:text-text-secondary-dark"></div>
-                </div>
-                <!-- Language Switcher - Desktop -->
-                <div class="language-switcher ml-4">
-                    <div class="language-switcher-btn text-lg text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 p-2 rounded-md">
-                        {{ .Language.Lang | upper }}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m6 9 6 6 6-6"/>
-                        </svg>
-                    </div>
-                    <div class="language-dropdown">
-                        {{ range .Site.Languages }}
-                            {{ $translation := "" }}
-                            {{ $foundTranslations := where $.Page.Translations "Lang" .Lang }}
-                            {{ if $foundTranslations }}
-                                {{ $translation = index $foundTranslations 0 }}
-                            {{ end }}
-                            {{ $isCurrentLang := eq .Lang $.Language.Lang }}
-                            <a href="{{ if $translation }}{{ $translation.Permalink }}{{ else }}{{ .Lang | absLangURL }}{{ end }}" 
-                               class="{{ if $isCurrentLang }}language-active{{ end }} text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300">
-                                {{ .LanguageName }}
-                            </a>
-                        {{ end }}
-                    </div>
                 </div>
                 <button id="theme-toggle-button-desktop" class="ml-4 inline-block text-lg text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 p-2 rounded-md">
                   <svg id="theme-toggle-dark-icon-desktop" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
@@ -113,32 +85,10 @@
     <!-- Mobile Navigation Overlay -->
     <div id="mobile-menu" class="fixed inset-0 bg-bg-secondary-light dark:bg-bg-secondary-dark z-50 hidden transition-all duration-300 backdrop-blur-2xl">
         <div class="flex flex-col h-full">
-            <div class="flex justify-between items-center p-6">
+            <div class="flex justify-between items-center p-4">
                 <span class="text-xl font-bold text-text-primary-light dark:text-text-primary-dark">{{ T "menuTitle" }}</span>
                 <div class="flex items-center gap-4">
-                    <!-- Language Switcher - Mobile -->
-                    <div class="language-switcher">
-                        <div class="language-switcher-btn text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 flex items-center p-2 rounded-md">
-                            {{ .Language.Lang | upper }}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m6 9 6 6 6-6"/>
-                            </svg>
-                        </div>
-                        <div class="language-dropdown">
-                            {{ range .Site.Languages }}
-                                {{ $translation := "" }}
-                                {{ $foundTranslationsMobile := where $.Page.Translations "Lang" .Lang }}
-                                {{ if $foundTranslationsMobile }}
-                                    {{ $translation = index $foundTranslationsMobile 0 }}
-                                {{ end }}
-                                {{ $isCurrentLang := eq .Lang $.Language.Lang }}
-                                <a href="{{ if $translation }}{{ $translation.Permalink }}{{ else }}{{ .Lang | absLangURL }}{{ end }}" 
-                                   class="{{ if $isCurrentLang }}language-active{{ end }} text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300">
-                                    {{ .LanguageName }}
-                                </a>
-                            {{ end }}
-                        </div>
-                    </div>
+                    
                     <button id="theme-toggle-button-mobile" class="text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 flex items-center p-2 rounded-md">
                       <svg id="theme-toggle-dark-icon-mobile" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                         <path d="M21.7519 15.0021C20.597 15.484 19.3296 15.7501 18 15.7501C12.6152 15.7501 8.25 11.3849 8.25 6.00011C8.25 4.67052 8.51614 3.40308 8.99806 2.24817C5.47566 3.71798 3 7.19493 3 11.2501C3 16.6349 7.36522 21.0001 12.75 21.0001C16.8052 21.0001 20.2821 18.5245 21.7519 15.0021Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -154,12 +104,21 @@
                     </button>
                 </div>
             </div>
-            <nav class="flex flex-col p-6 space-y-4">
+            <nav class="flex flex-col p-4 space-y-3">
                 {{ range .Site.Menus.main }}
-                <a href="{{ .URL | absURL }}" class="text-xl text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 {{ if or ($.Page.IsMenuCurrent "main" .) ($.Page.HasMenuCurrent "main" .) }}text-accent-light dark:text-accent-dark font-semibold{{ end }}" data-menu-link>{{ .Name }}</a>
+                {{ $itemUrl := .URL | absURL }}
+                {{ $current := $.Permalink }}
+                {{ $isActive := or (or ($.Page.IsMenuCurrent "main" .) ($.Page.HasMenuCurrent "main" .)) (or (eq $itemUrl $current) (hasPrefix $current $itemUrl)) }}
+                <a href="{{ $itemUrl }}" class="text-xl transition-colors duration-300 px-2 py-1 rounded-md border-l-2
+                   text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark
+                   {{ if $isActive }}
+                       text-accent-light dark:text-accent-dark font-semibold bg-white/30 dark:bg-white/10 border-accent-light dark:border-accent-dark
+                   {{ else }}
+                       border-transparent
+                   {{ end }}" data-menu-link>{{ .Name }}</a>
                 {{ end }}
             </nav>
-            <div class="mt-auto p-6">
+            <div class="mt-auto p-4">
                 <div class="flex items-center justify-center">
                     <span class="text-lg text-text-secondary-light dark:text-text-secondary-dark mr-2">{{ T "localTimeLabel" }}</span>
                     <div id="mobile-local-time" class="text-lg text-text-secondary-light dark:text-text-secondary-dark"></div>

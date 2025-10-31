@@ -107,7 +107,12 @@
     </head>
     <body class="min-h-screen bg-bg-primary-light dark:bg-bg-primary-dark text-text-primary-light dark:text-text-primary-dark">
         {{ partial "header" . }}
-        <main>
+        {{/* Keep dashboard layout visually unchanged (it manages its own centering). For other pages add top padding so header doesn't overlap content. */}}
+        {{ $mainClasses := "absolute top-0 left-0 right-0 bottom-0" }}
+        {{ if ne .Layout "dashboard" }}
+            {{ $mainClasses = (printf "%s %s" $mainClasses "pt-20 md:pt-24") }}
+        {{ end }}
+        <main class="{{ $mainClasses }}">
             {{ block "main" . }}{{ end }}
         </main>
         {{ partial "footer" . }}
