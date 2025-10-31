@@ -1,0 +1,321 @@
+{{ define "main" }}
+<style>
+    /* Liquid glass background */
+    .liquid-bg {
+        position: relative;
+        overflow: hidden;
+        /* mouse + oscillation controlled vars */
+        --mx: 0.5; /* mouse x normalized [0,1] */
+        --my: 0.5; /* mouse y normalized [0,1] */
+        --osc: 0;  /* gentle sinusoidal oscillation [-1,1] */
+        --footer-color: rgba(255,255,255,1);
+    }
+    .dark .liquid-bg { --footer-color: rgba(18,18,18,1); }
+    .liquid-bg::before {
+        content: "";
+        position: absolute;
+        inset: -20% -10% -10% -20%;
+        background: 
+            radial-gradient(
+                60% 80% 
+                at calc(8% + (var(--mx) * 16%) + (var(--osc) * 4%)) 
+                   calc(10% + (var(--my) * 16%) - (var(--osc) * 4%)), 
+                rgba(59,130,246,0.30) 0%, rgba(59,130,246,0.00) 60%
+            ),
+            radial-gradient(
+                50% 70% 
+                at calc(88% - (var(--mx) * 20%) - (var(--osc) * 4%)) 
+                   calc(18% + (var(--my) * 20%) + (var(--osc) * 4%)), 
+                rgba(236,72,153,0.26) 0%, rgba(236,72,153,0.00) 60%
+            ),
+            radial-gradient(
+                40% 60% 
+                at calc(42% + (var(--mx) * 16%)) 
+                   calc(78% - (var(--my) * 16%)), 
+                rgba(16,185,129,0.22) 0%, rgba(16,185,129,0.00) 60%
+            ),
+            radial-gradient(
+                55% 55% 
+                at calc(60% + (var(--mx) * 10%)) 
+                   calc(45% - (var(--my) * 10%)), 
+                rgba(245,158,11,0.18) 0%, rgba(245,158,11,0.00) 60%
+            );
+        filter: blur(40px) saturate(120%);
+        animation: liquid-shift 18s ease-in-out infinite alternate;
+        pointer-events: none;
+    }
+    /* Bottom fade to blend into footer background */
+    .liquid-bg::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 260px; /* fade height */
+        background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, var(--footer-color) 100%);
+        pointer-events: none;
+    }
+    /* Bottom fade into page/footer background to avoid a hard edge */
+    .liquid-bg::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 260px; /* fade height */
+        background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+        pointer-events: none;
+    }
+    .dark .liquid-bg::after {
+        background: linear-gradient(to bottom, rgba(18,18,18,0) 0%, rgba(18,18,18,1) 100%);
+    }
+    @keyframes liquid-shift {
+        0% { transform: translate3d(0, 0, 0) scale(1); }
+        50% { transform: translate3d(-2%, 1%, 0) scale(1.05); }
+        100% { transform: translate3d(2%, -1%, 0) scale(1.02); }
+    }
+
+    /* Glass card styling */
+    .glass-card {
+        position: relative;
+        border-radius: 1rem;
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.28)) padding-box;
+        border: 1px solid rgba(255,255,255,0.38);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.38), inset 0 -10px 32px rgba(255,255,255,0.08);
+        backdrop-filter: blur(18px) saturate(160%) contrast(108%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%) contrast(108%);
+        transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, background 200ms ease;
+        overflow: hidden; /* keep pseudo-elements clipped */
+    }
+    .dark .glass-card {
+        background:
+            linear-gradient(180deg, rgba(31,41,55,0.55), rgba(31,41,55,0.28)) padding-box;
+        border-color: rgba(148,163,184,0.25);
+        box-shadow: 0 12px 34px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -10px 30px rgba(0,0,0,0.18);
+    }
+    /* Rim highlight and thickness illusion */
+    .glass-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background:
+            radial-gradient(60% 40% at 10% 0%, rgba(255,255,255,0.35), rgba(255,255,255,0.00) 60%),
+            linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.00) 60%);
+        opacity: 0.95;
+        pointer-events: none;
+        mix-blend-mode: screen;
+    }
+    /* Base subtle noise layer (kept minimal) */
+    .glass-card::after {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        background:
+            repeating-linear-gradient(0deg, rgba(255,255,255,0.01) 0 1px, rgba(255,255,255,0.00) 1px 3px);
+        mix-blend-mode: overlay;
+        opacity: 0.2;
+        pointer-events: none;
+    }
+    /* Caustics + micro-scratches (scratched variant only) */
+    .glass-card--scratched::after {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        background:
+            /* caustic blobs */
+            radial-gradient(120px 80px at 20% 5%, rgba(255,255,255,0.10), rgba(255,255,255,0.00) 60%),
+            radial-gradient(160px 120px at 85% 0%, rgba(255,255,255,0.07), rgba(255,255,255,0.00) 65%),
+            conic-gradient(from 210deg at 50% 30%, rgba(255,255,255,0.06), rgba(255,255,255,0.00) 40%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0.00) 85%),
+            /* micro scratches */
+            repeating-linear-gradient(90deg, rgba(255,255,255,0.045) 0 1px, rgba(255,255,255,0.00) 1px 2px),
+            repeating-linear-gradient(0deg, rgba(255,255,255,0.030) 0 1px, rgba(255,255,255,0.00) 1px 2px),
+            repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 1px, rgba(255,255,255,0.00) 1px 3px),
+            repeating-linear-gradient(22.5deg, rgba(255,255,255,0.020) 0 1px, rgba(255,255,255,0.00) 1px 2px);
+        mix-blend-mode: overlay;
+        opacity: 0.88; /* higher definition */
+        pointer-events: none;
+        filter: contrast(105%) saturate(125%);
+    }
+    /* Rippled glass variant - varied curved lines (no rings) */
+    .glass-card--rippled::after {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        /* varied curved lines via layered conic arcs + soft noise */
+        background:
+            conic-gradient(
+                from 210deg at calc(40% + (var(--mx) * 8%)) calc(30% + (var(--my) * 6%)),
+                rgba(255,255,255,0.06) 0 2deg,
+                rgba(255,255,255,0.00) 2deg 16deg,
+                rgba(255,255,255,0.04) 16deg 18deg,
+                rgba(255,255,255,0.00) 18deg 32deg,
+                rgba(255,255,255,0.05) 32deg 34deg,
+                rgba(255,255,255,0.00) 34deg 360deg
+            ),
+            conic-gradient(
+                from 40deg at calc(70% - (var(--mx) * 10%)) calc(55% + (var(--my) * 5%)),
+                rgba(255,255,255,0.05) 0 3deg,
+                rgba(255,255,255,0.00) 3deg 20deg,
+                rgba(255,255,255,0.04) 20deg 22deg,
+                rgba(255,255,255,0.00) 22deg 36deg,
+                rgba(255,255,255,0.03) 36deg 38deg,
+                rgba(255,255,255,0.00) 38deg 360deg
+            ),
+            conic-gradient(
+                from 300deg at calc(55% + (var(--mx) * 6%)) calc(75% - (var(--my) * 6%)),
+                rgba(255,255,255,0.045) 0 2deg,
+                rgba(255,255,255,0.00) 2deg 18deg,
+                rgba(255,255,255,0.035) 18deg 20deg,
+                rgba(255,255,255,0.00) 20deg 30deg,
+                rgba(255,255,255,0.025) 30deg 32deg,
+                rgba(255,255,255,0.00) 32deg 360deg
+            ),
+            /* soft film noise for diffusion */
+            repeating-linear-gradient(17deg, rgba(255,255,255,0.010) 0 1px, rgba(255,255,255,0.00) 1px 4px),
+            repeating-linear-gradient(111deg, rgba(255,255,255,0.010) 0 1px, rgba(255,255,255,0.00) 1px 5px);
+        mix-blend-mode: overlay;
+        opacity: 0.62; /* a bit stronger */
+        pointer-events: none;
+        filter: blur(3.8px) contrast(108%) saturate(125%);
+        will-change: filter;
+    }
+    .glass-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 46px rgba(0,0,0,0.20);
+    }
+    .dark .glass-card:hover {
+        box-shadow: 0 22px 60px rgba(0,0,0,0.55);
+    }
+    /* Subtle animated sheen on hover */
+    .glass-card .sheen {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(60% 60% at 50% 50%, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.00) 62%);
+        transform: translate(-10%, -10%) rotate(15deg);
+        opacity: 0;
+        transition: opacity 300ms ease;
+        pointer-events: none;
+    }
+    .glass-card:hover .sheen { opacity: 1; }
+    /* Center the dashboard content in the viewport and move children down
+       without adding top padding. We use a full-height flex container and
+       translate the inner wrapper downward. */
+    #liquid-bg {
+        display: flex;
+        align-items: center;      /* vertical centering of the wrapper */
+        justify-content: center;  /* horizontal centering */
+        min-height: 100vh;
+        height: 100vh;
+    }
+    /* Shift the inner content down relative to the centered position */
+    #liquid-bg > .max-w-5xl {
+        transform: translateY(8vh);
+        /* keep any existing transform behaviour smooth */
+        transition: transform 240ms ease;
+    }
+    /* prevent page scroll on dashboard */
+    html, body { overflow: hidden; }
+
+    /* Override accidental borders that may appear on simple wrappers (e.g. .mb-6)
+       Remove border/box-shadow/background on the element and its pseudo-elements
+       to stop the white line appearing in Chrome DevTools showing "* ::before ::after" */
+    .max-w-5xl .mb-6,
+    .max-w-5xl .mb-6::before,
+    .max-w-5xl .mb-6::after {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        outline: none !important;
+    }
+</style>
+<div id="liquid-bg" class="liquid-bg">
+    <div class="max-w-5xl mx-auto px-3 py-6">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold mb-2 text-text-primary-light dark:text-text-primary-dark">{{ .Title }}</h1>
+        {{ with .Description }}
+        <p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">{{ . }}</p>
+        {{ end }}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="/blog/" class="block glass-card glass-card--rippled p-6 transition-colors">
+            <span class="sheen"></span>
+            <div class="text-xl font-semibold mb-1 text-text-primary-light dark:text-text-primary-dark">Blog</div>
+            <p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Latest posts discussing a contrasting material and design notes.</p>
+        </a>
+
+        <a href="/overview/" class="block glass-card glass-card--scratched p-6 transition-colors">
+            <span class="sheen"></span>
+            <div class="text-xl font-semibold mb-1 text-text-primary-light dark:text-text-primary-dark">Overview</div>
+            <p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">High-level summary of Liquid Glass material (optical, mechanical properties).</p>
+        </a>
+    </div>
+
+
+    </div>
+    </div>
+
+    <script>
+    (function() {
+        const container = document.getElementById('liquid-bg');
+        if (!container) return;
+
+        let prefersReducedMotion = false;
+        try {
+            prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        } catch (_) {}
+
+        // mouse tracking → update CSS vars in [0,1]
+        function handlePointerMove(e) {
+            const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            const x = (e.clientX ?? vw / 2) / vw;
+            const y = (e.clientY ?? vh / 2) / vh;
+            container.style.setProperty('--mx', x.toFixed(4));
+            container.style.setProperty('--my', y.toFixed(4));
+        }
+
+        // gentle oscillation
+        let rafId = null;
+        let t0 = performance.now();
+        const amplitude = 1.8; // more pronounced movement
+        const periodMs = 16000; // slow oscillation
+
+        function tick(now) {
+            const dt = now - t0;
+            const phase = (dt % periodMs) / periodMs * Math.PI * 2;
+            const osc = Math.sin(phase) * amplitude; // [-amplitude, amplitude]
+            container.style.setProperty('--osc', osc.toFixed(4));
+            rafId = requestAnimationFrame(tick);
+        }
+
+        // init
+        window.addEventListener('mousemove', handlePointerMove, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+            if (!e.touches || !e.touches[0]) return;
+            handlePointerMove(e.touches[0]);
+        }, { passive: true });
+        // set center initially
+        handlePointerMove({ clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 });
+
+        if (!prefersReducedMotion) {
+            rafId = requestAnimationFrame(tick);
+        }
+
+        // cleanup on page nav (Hugo SPA-like transitions aren’t default, but be safe)
+        window.addEventListener('beforeunload', () => {
+            if (rafId) cancelAnimationFrame(rafId);
+        });
+        })();
+    </script>
+{{ end }}
+
+

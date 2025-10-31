@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My New Hugo Site</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on My New Hugo Site</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 30 Oct 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Applications of Liquid Glass</title>
+      <link>http://localhost:1313/blog/2025-10-30-liquid-glass-applications/</link>
+      <pubDate>Thu, 30 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/blog/2025-10-30-liquid-glass-applications/</guid>
+      <description>&lt;h1 id=&#34;applications&#34;&gt;Applications&lt;/h1&gt;&#xA;&lt;p&gt;Liquid Glass finds use in optics, protective coatings, and transparent armor. The material&amp;rsquo;s combination of &lt;strong&gt;clarity&lt;/strong&gt; and &lt;em&gt;toughness&lt;/em&gt; makes it attractive for next-generation windows and lenses.&lt;/p&gt;&#xA;&lt;h2 id=&#34;real-world-uses&#34;&gt;Real-world Uses&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Optical lenses and covers&lt;/li&gt;&#xA;&lt;li&gt;Protective transparent layers&lt;/li&gt;&#xA;&lt;li&gt;Specialty displays&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;Return to the &lt;a href=&#34;http://localhost:1313/dashboard/&#34;&gt;Dashboard&lt;/a&gt; or explore &lt;a href=&#34;http://localhost:1313/specs/&#34;&gt;Technical Specs&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Discovery and Synthesis of Liquid Glass</title>
+      <link>http://localhost:1313/blog/2025-10-30-liquid-glass-discovery/</link>
+      <pubDate>Thu, 30 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/blog/2025-10-30-liquid-glass-discovery/</guid>
+      <description>&lt;h1 id=&#34;discovery-and-synthesis&#34;&gt;Discovery and Synthesis&lt;/h1&gt;&#xA;&lt;p&gt;Liquid Glass is an engineered material with exceptional optical clarity and mechanical resilience. In this post we summarize the discovery path and synthesis techniques.&lt;/p&gt;&#xA;&lt;h2 id=&#34;key-points&#34;&gt;Key Points&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Tunable refractive index&lt;/li&gt;&#xA;&lt;li&gt;High impact resistance&lt;/li&gt;&#xA;&lt;li&gt;Low scattering and high transparency&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;Read more on the &lt;a href=&#34;http://localhost:1313/overview/&#34;&gt;Overview&lt;/a&gt; page for a summary of material properties.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Dashboard</title>
+      <link>http://localhost:1313/dashboard/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/dashboard/</guid>
+      <description>&lt;p&gt;Welcome to the Liquid Glass dashboard. Use the quick links below to explore demos, specifications, and resources.&lt;/p&gt;&#xA;&lt;h1 id=&#34;liquid-glass-dashboard&#34;&gt;Liquid Glass Dashboard&lt;/h1&gt;&#xA;&lt;h2 id=&#34;quick-links-and-summary&#34;&gt;Quick links and summary&lt;/h2&gt;&#xA;&lt;p&gt;Below are quick links using the existing site tabs: &lt;a href=&#34;http://localhost:1313/dashboard/&#34;&gt;Dashboard&lt;/a&gt;, &lt;a href=&#34;http://localhost:1313/overview/&#34;&gt;Overview&lt;/a&gt;, and &lt;a href=&#34;http://localhost:1313/blog/&#34;&gt;Blog&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;Liquid Glass is an engineered material with exceptional optical clarity. This dashboard highlights demos and links to deeper sections. The material offers &lt;strong&gt;high transparency&lt;/strong&gt; and &lt;em&gt;mechanical toughness&lt;/em&gt; at the same time.&lt;/p&gt;&#xA;&lt;p&gt;For longer reads, check the Blog (two recent posts are available under the &amp;ldquo;Blog&amp;rdquo; tab) or explore the &lt;a href=&#34;http://localhost:1313/overview/&#34;&gt;Overview&lt;/a&gt; page for a concise summary.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Overview</title>
+      <link>http://localhost:1313/overview/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/overview/</guid>
+      <description>&lt;p&gt;This page provides a concise overview. Jump to a section:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;http://localhost:1313/dashboard/&#34;&gt;Dashboard&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;http://localhost:1313/blog/&#34;&gt;Blog&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;overview--liquid-glass-material&#34;&gt;Overview — Liquid Glass Material&lt;/h1&gt;&#xA;&lt;h2 id=&#34;what-is-liquid-glass&#34;&gt;What is Liquid Glass?&lt;/h2&gt;&#xA;&lt;p&gt;Liquid Glass is a modern engineered material combining &lt;strong&gt;optical clarity&lt;/strong&gt; with &lt;em&gt;mechanical resilience&lt;/em&gt;. It is suitable for lenses, coatings, and transparent protective layers.&lt;/p&gt;&#xA;&lt;p&gt;See the tabs at the top — Dashboard and Blog — to navigate. Also check the &lt;a href=&#34;http://localhost:1313/blog/&#34;&gt;Blog&lt;/a&gt; for two short posts on discovery and applications.&lt;/p&gt;&#xA;&lt;p&gt;Image preview:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

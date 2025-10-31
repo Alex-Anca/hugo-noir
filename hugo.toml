@@ -1,0 +1,19 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'My New Hugo Site'
+theme = 'hugo-noir'
+
+[menu]
+  [[menu.main]]
+    name = "Dashboard"
+    url = "/dashboard/"
+    weight = 1
+  [[menu.main]]
+    name = "Overview"
+    url = "/overview/"
+    weight = 2
+  [[menu.main]]
+    name = "Blog"
+    url = "/blog/"
+    weight = 3
+

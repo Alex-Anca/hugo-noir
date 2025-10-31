@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>http://localhost:1313/blog/2025-10-30-liquid-glass-applications/</loc>
+    <lastmod>1969-07-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/blog/</loc>
+    <lastmod>1969-07-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>1969-07-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/blog/2025-10-30-liquid-glass-discovery/</loc>
+    <lastmod>1905-06-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/</loc>
+  </url><url>
+    <loc>http://localhost:1313/dashboard/</loc>
+  </url><url>
+    <loc>http://localhost:1313/overview/</loc>
+  </url><url>
+    <loc>http://localhost:1313/resources/</loc>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+  </url><url>
+    <loc>http://localhost:1313/specs/</loc>
+  </url>
+</urlset>
